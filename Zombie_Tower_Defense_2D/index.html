@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#08171b">
+  <title>Zombie Tower Defense 2D — Última Resistência</title>
+  <style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#f0f8f1;background:#07171b;font-synthesis:none}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}button{cursor:pointer;font:inherit;color:inherit;border:0}button:disabled{cursor:not-allowed;opacity:.43}.hidden{display:none!important}#app{height:100vh;height:100dvh;width:100vw;position:relative;overflow:hidden;background:#0d2523}#mapViewport{position:absolute;inset:0;overflow:hidden;background:#183b37}#gameCanvas{display:block;width:100%;height:100%;touch-action:none}#worldShade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 100% 90% at 50% 48%,transparent 53%,rgba(2,13,15,.34) 100%)}.eyebrow{font-size:11px;letter-spacing:2.7px;font-weight:900;color:#a7e8b2;text-transform:uppercase}#toast{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%) translateY(12px);opacity:0;pointer-events:none;transition:.2s;z-index:60;padding:14px 23px;background:#102a2cea;border:1px solid #87d5ab99;border-radius:12px;box-shadow:0 14px 40px #0008;font-size:14px;font-weight:800;text-align:center;max-width:90vw}#toast.visible{opacity:1;transform:translate(-50%,-50%) translateY(0)}.menu-backdrop{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,17,21,.96) 0%,rgba(5,19,22,.9) 45%,rgba(4,16,19,.43) 100%);z-index:10;pointer-events:none}.menu-shimmer{position:absolute;inset:0;background-image:linear-gradient(#86d2aa0a 1px,transparent 1px),linear-gradient(90deg,#86d2aa0a 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(90deg,#000,transparent)}.screen{position:absolute;inset:0;z-index:20;overflow:auto}.menu-screen{display:flex;flex-direction:column;padding:30px clamp(26px,6vw,104px)}.menu-top{display:flex;justify-content:space-between;align-items:center;gap:16px;letter-spacing:1.7px;font-size:11px;color:#98b4b0;font-weight:800}.brand{font-size:15px;color:#b9e7d2}.brand:first-letter{color:#b2ef78}.hero{margin:auto 0;max-width:700px;padding:40px 0}.hero h1{font-size:clamp(43px,5.5vw,85px);line-height:.97;letter-spacing:-3px;margin:14px 0 24px;font-weight:1000;text-shadow:0 7px 32px #0008}.hero h1 em,h2 em{font-style:normal;color:#adf081}.hero h1 sup{font-size:.28em;letter-spacing:0;vertical-align:top;display:inline-block;margin:11px 0 0 7px;color:#112419;background:#b7ef89;padding:7px 9px;border-radius:7px}.hero p,.content>p{max-width:610px;line-height:1.7;font-size:15px;color:#bad0cc}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin:29px 0}.big{padding:16px 22px!important;letter-spacing:.5px;font-size:12px!important;font-weight:900!important}.primary{background:linear-gradient(135deg,#b9f08b,#65ce9b);color:#102b22;border:1px solid #cbffb0;border-radius:9px;padding:12px 16px;font-weight:1000;box-shadow:0 7px 24px #39e27d1c}.primary:hover{filter:brightness(1.1)}.outline{border:1px solid #6a949078;background:#12323696;border-radius:9px}.outline:hover,.back:hover{background:#2b5451}.feature-row{display:flex;flex-wrap:wrap;gap:8px 21px;color:#c1dfc9;font-size:11px;font-weight:900;letter-spacing:1px}.menu-foot{font-size:10px;letter-spacing:2px;color:#9fc6b8;margin-top:auto;padding-bottom:8px}.menu-panel{padding:50px clamp(18px,7vw,110px);background:linear-gradient(90deg,#06191de8,#071b20e8)}.content{max-width:1230px;margin:auto}.back{background:none;color:#a4c6bd;font-size:12px;font-weight:900;letter-spacing:.7px;padding:10px 2px;margin-bottom:30px}.content h2,.modal h2{font-size:clamp(29px,4vw,53px);line-height:1.07;letter-spacing:-1.6px;margin:12px 0}.level-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:28px}.level-card{padding:0;overflow:hidden;text-align:left;background:#122e32;border:1px solid #55837a65;border-radius:14px;min-height:274px;transition:.15s}.level-card:hover:not(:disabled){transform:translateY(-3px);border-color:#b3f28e}.level-art{height:145px;position:relative;display:flex;align-items:center;justify-content:center;font-size:62px;overflow:hidden}.level-art:before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,transparent 0 21px,#fff1 23px 24px)}.level-art span{z-index:1;filter:drop-shadow(0 8px 12px #000a)}.level-info{padding:15px;display:grid;gap:8px}.level-info b{font-size:15px}.level-info small{color:#a3c1b9;font-weight:700;line-height:1.5}.level-card.locked .level-art{filter:grayscale(1) brightness(.6)}.level-card.locked{opacity:.65}.note{font-size:12px;color:#a6c8bd;font-weight:800;letter-spacing:.3px;margin:22px 0}.diff-content{max-width:980px}.difficulty-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}.difficulty-choice{background:#15373baa;border:1px solid #6e9b996a;border-radius:14px;min-height:162px;display:grid;justify-items:center;align-content:center;gap:9px}.difficulty-choice span{font-size:35px}.difficulty-choice b{letter-spacing:1px}.difficulty-choice small{color:#a0bdb5}.difficulty-choice.active{background:#204d3e;border:2px solid #b9e987;box-shadow:inset 0 0 45px #caff7820}.modal-overlay{position:absolute;inset:0;background:#041015c9;backdrop-filter:blur(6px);z-index:90;display:grid;place-items:center;padding:18px}.modal{background:linear-gradient(155deg,#14383d,#092126);border:1px solid #82ae9773;box-shadow:0 35px 100px #000c;border-radius:19px;padding:clamp(22px,4vw,43px);width:min(540px,100%);max-height:90vh;overflow:auto}.modal h2{font-size:34px;margin:10px 0 22px}.modal p,.modal li{font-size:14px;color:#c0d7ce;line-height:1.7}.modal ul{padding-left:22px}.modal-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.modal-buttons button{border:1px solid #6c8e84;background:#264b49;border-radius:8px;padding:12px 17px;font-weight:900;font-size:12px}.modal-buttons .primary{background:#b8ed8d;color:#193121}.modal-buttons .danger{color:#ffc4bd;border-color:#994b46}.modal .switch{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:20px}.modal .switch button{padding:10px 14px;background:#234544;border:1px solid #688c77;border-radius:7px}.hud-top{position:absolute;z-index:4;left:14px;right:14px;top:12px;display:flex;align-items:start;gap:12px;pointer-events:none}.hud-top>*{pointer-events:auto}.hud-card{background:#082327ed;box-shadow:0 9px 35px #05161991;border:1px solid #94b5ac4b;border-radius:11px;padding:12px 16px}.wave-status{width:286px}.wave-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:7px 0}.wave-title strong{font-size:21px;letter-spacing:.5px}.wave-title small{background:#8fba7a30;color:#c6f79f;border:1px solid #9bd48a55;border-radius:5px;padding:4px 7px;font-size:10px;font-weight:900}.mini-meta{color:#b7d4c7;display:flex;justify-content:space-between;gap:8px;font-size:11px}.base-status{width:min(330px,28vw)}.bar-label{display:flex;justify-content:space-between;align-items:center;gap:7px;font-size:11px;font-weight:900;color:#d4e7dc;white-space:nowrap}.bar-track{height:12px;border-radius:30px;background:#143235;overflow:hidden;border:1px solid #607b7569;margin:9px 0}.bar-fill{height:100%;width:100%;background:linear-gradient(90deg,#5cbd7c,#b9f18a);transition:width .2s}.base-caption{font-size:10px;color:#9eb8af}.hud-actions{display:flex;gap:8px;margin-left:auto}.icon-button{height:43px;width:43px;border-radius:9px;background:#0a2b2de8;border:1px solid #89b0a65c;font-size:21px}.icon-button:hover{background:#1b514a}.boss-hud{position:absolute;top:102px;left:50%;transform:translateX(-50%);width:min(440px,50vw);background:#220e1bcc;border:1px solid #e57392;border-radius:9px;padding:9px 13px;z-index:4;pointer-events:none}.boss-label{display:flex;justify-content:space-between;font-size:12px;color:#ffd5dd}.bar-track.boss{background:#381b28;margin:7px 0 2px;height:10px}.boss-fill{height:100%;background:linear-gradient(90deg,#b63b59,#ff96aa);width:100%;transition:width .2s}.wave-ready{position:absolute;z-index:6;right:26px;top:50%;transform:translateY(-50%);text-align:center;background:#0a2528e8;border:1px solid #8bb8a276;border-radius:16px;box-shadow:0 20px 65px #0008;padding:24px 20px;width:250px}.wave-ready h3{font-size:29px;margin:9px 0}.wave-ready p{font-size:13px;line-height:1.55;color:#b5cfc5}.wave-ready .primary{width:100%}.build-hint{position:absolute;z-index:5;left:50%;bottom:144px;transform:translateX(-50%);background:#092b2ce6;border:1px solid #76c99a80;border-radius:9px;padding:8px 16px;font-size:12px;font-weight:800;text-align:center;pointer-events:none;max-width:calc(100vw - 36px)}.hud-bottom{position:absolute;bottom:12px;left:14px;right:14px;display:flex;gap:11px;align-items:stretch;z-index:5;pointer-events:none}.hud-bottom>*{pointer-events:auto}.tower-panel{background:#09252aed;border:1px solid #88a89c6b;box-shadow:0 7px 30px #0007;border-radius:13px;padding:11px;flex:1;min-width:0}.panel-title{display:flex;gap:10px;align-items:center;justify-content:space-between;font-size:10px;font-weight:950;letter-spacing:1.2px;margin-bottom:8px;color:#e1f4e6}.panel-title small{font-size:9px;color:#a9c9b3}.tower-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.tower-option{display:flex;align-items:center;gap:9px;min-height:63px;text-align:left;background:#16383b;border:1px solid #6d94886b;border-radius:9px;padding:7px;position:relative}.tower-option:hover{background:#235148}.tower-option.active{background:#2c5943;border-color:#b9f68b;box-shadow:inset 0 0 12px #8dfa613b}.glyph{width:43px;height:43px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;font-weight:950;font-size:28px;text-shadow:0 2px 6px #0008}.glyph.archer{background:#30553c;color:#b6ed89}.glyph.cannon{background:#4a4245;color:#f0b77f}.glyph.ice{background:#245465;color:#91eaff}.glyph.fire{background:#653729;color:#ffbb78}.glyph.electric{background:#554d33;color:#fff38c}.tower-text{display:flex;flex-direction:column;gap:3px;min-width:0}.tower-text b{font-size:11px;letter-spacing:.4px}.tower-text small{font-size:9px;line-height:1.3;color:#adc8be}.tower-option kbd{position:absolute;right:5px;top:5px;font-size:9px;color:#c2d9c7}.context-panel{width:250px;max-width:25vw;padding:12px 14px;background:#09252aed;border:1px solid #88a89c6b;border-radius:13px;font-size:11px;color:#b6cfc6;display:flex;flex-direction:column;gap:7px}.context-title{font-size:12px;color:#dcf8e4;font-weight:900}.edit-actions{display:flex;gap:5px;flex-wrap:wrap}.edit-actions button{padding:7px 8px;border-radius:6px;background:#23514a;border:1px solid #739c82;font-weight:900;font-size:10px}.edit-actions .danger{background:#502a30;border-color:#a36465}.text-button{background:none;text-align:left;color:#c2dbb4;font-weight:800;font-size:10px;margin-top:auto;padding:2px}.text-button:hover{text-decoration:underline}@media(max-width:1000px){.level-cards{grid-template-columns:repeat(3,minmax(0,1fr))}.tower-option{flex-direction:column;gap:2px}.tower-text{text-align:center}.tower-text small{display:none}.tower-option kbd{display:none}.context-panel{max-width:27vw}.wave-status{width:240px}.wave-title strong{font-size:17px}}@media(max-width:650px){.menu-screen{padding:20px}.menu-top{font-size:9px}.hero h1{letter-spacing:-2px}.hero{padding:25px 0}.level-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.difficulty-grid{grid-template-columns:repeat(2,1fr)}.hud-top{top:5px;left:5px;right:5px;gap:5px}.hud-card{padding:7px}.wave-status{width:153px}.wave-status .eyebrow{font-size:8px;letter-spacing:.4px}.wave-title{margin:4px 0}.wave-title strong{font-size:13px}.wave-title small{font-size:8px;padding:2px}.mini-meta{font-size:8px;display:block}.base-status{width:160px}.bar-label{font-size:8px;white-space:normal}.base-caption{display:none}.hud-actions{gap:3px}.icon-button{height:30px;width:30px;font-size:16px}.hud-bottom{bottom:5px;left:5px;right:5px;gap:5px}.tower-panel{padding:5px}.panel-title{font-size:8px}.panel-title small{display:none}.tower-options{gap:3px}.tower-option{padding:3px;min-height:53px}.glyph{width:31px;height:30px;font-size:22px}.tower-text b{font-size:8px}.context-panel{width:125px;max-width:29vw;padding:6px;gap:3px;font-size:9px}.context-title{font-size:9px}.text-button{font-size:8px}.edit-actions button{font-size:8px;padding:5px}.build-hint{bottom:104px;font-size:9px}.wave-ready{width:195px;right:9px;padding:16px}.boss-hud{top:75px;width:80vw}}
+
+/* Botão Auto Wave: apenas uma pequena adição ao painel existente. */
+.auto-wave-btn{display:block;width:100%;margin-top:10px;padding:9px 11px;border-radius:7px;background:#19363b;color:#b6c9c4;border:1px solid #54716b;font-size:11px;letter-spacing:1.1px;font-weight:950;transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
+.auto-wave-btn:hover{background:#265052;border-color:#b9efa4}
+.auto-wave-btn.active{background:linear-gradient(105deg,#a5e77e,#5dcc9e);color:#0d3027;border-color:#d5ffb2;box-shadow:0 0 14px #8bdd8140}
+.auto-wave-btn:focus-visible{outline:2px solid #ecffd4;outline-offset:3px}
+@media(max-width:650px){.auto-wave-btn{font-size:9px;letter-spacing:.3px;padding:6px 3px;margin-top:6px}}
+
+/* Limites de torres específicos por fase/dificuldade */
+.difficulty-choice .diff-tower-limit{font-size:11px;color:#d1faa1;font-weight:950;letter-spacing:.5px;background:#254f3f;border:1px solid #86b88080;padding:6px 8px;border-radius:7px}.difficulty-choice.active .diff-tower-limit{background:#386b46;color:#f3ffd6}.difficulty-hint{font-size:12px;line-height:1.5;color:#c9e0d1;margin:10px 0 24px}.difficulty-choice{min-height:184px;padding:12px 7px}
+
+/* Economia por dano: a faixa de dinheiro permanece visível durante a partida. */
+.money-chip{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;padding:7px 10px;border:1px solid #d5b96a8a;border-radius:8px;background:linear-gradient(105deg,#584a27a1,#1d443acb)}
+.money-chip span{font-size:10px;font-weight:900;letter-spacing:.7px;color:#f0dcaa}
+.money-chip strong{font-size:20px;font-weight:950;color:#ffe7a6;white-space:nowrap;letter-spacing:.5px}
+.tower-text .tower-price{display:block;color:#ffdc87;font-size:13px;letter-spacing:.2px;font-weight:950;margin-top:2px}
+.tower-option.unaffordable{opacity:.52;border-color:#7a6b658a}
+.tower-option.unaffordable .tower-price{color:#ffb9a3}
+.difficulty-choice .diff-economy{font-size:11px;color:#ffe4a0;font-weight:950;letter-spacing:.3px;background:#524528;border:1px solid #b5a47787;padding:6px 8px;border-radius:7px}
+.difficulty-choice.active .diff-economy{background:#526a36;color:#fff4cb}
+@media(max-width:1000px){.tower-text .tower-price{display:block;font-size:11px}.tower-option.unaffordable{opacity:.65}}
+@media(max-width:650px){.money-chip{margin-top:5px;padding:4px 5px;gap:3px}.money-chip span{font-size:7px}.money-chip strong{font-size:13px}.tower-text .tower-price{display:block;font-size:9px}.tower-text b{font-size:7px}}
+
+/* O aviso da construção fica acima do painel de botões, mesmo ao editar torres. */
+@media(min-width:651px){.build-hint{bottom:185px}}
+@media(max-width:650px){.build-hint{bottom:124px}}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="mapViewport"><canvas id="gameCanvas" aria-label="Mapa 2D de defesa com torres"></canvas><div id="worldShade"></div></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <section id="hud" class="hidden" aria-label="Informações da partida">
+    <header class="hud-top">
+      <div class="hud-card wave-status">
+        <span class="eyebrow" id="hudMap">🌲 FLORESTA PERDIDA</span>
+        <div class="wave-title"><strong id="hudWave">ONDA 1/5</strong><small id="hudDifficulty">NORMAL</small></div>
+        <div class="mini-meta"><span>☠ <b id="hudEnemies">0</b> restantes</span><span>▣ <b id="hudTowersCount">0</b> torres</span></div><div class="money-chip"><span>SEU DINHEIRO</span><strong id="hudMoney">💰 0</strong></div>
+        <button id="autoWaveBtn" class="auto-wave-btn" type="button" aria-pressed="false" title="Ativar ou desativar o início automático das ondas">⚡ AUTO WAVE: OFF</button>
+      </div>
+      <div class="hud-card base-status"><div class="bar-label"><span>◆ INTEGRIDADE DA BASE</span><strong id="baseNumber">350 / 350</strong></div><div class="bar-track"><div id="baseBar" class="bar-fill"></div></div><div class="base-caption">Proteja o núcleo. Só as torres podem deter a horda.</div></div>
+      <div class="hud-actions"><button id="soundBtn" title="Ativar ou desativar sons" class="icon-button">♫</button><button id="pauseBtn" title="Pausar" class="icon-button">Ⅱ</button></div>
+    </header>
+    <div id="bossHud" class="boss-hud hidden"><div class="boss-label"><span>☠ <b id="bossName">CHEFÃO DA HORDA</b></span><b id="bossHp">100%</b></div><div class="bar-track boss"><div id="bossBar" class="boss-fill"></div></div></div>
+    <div id="waveReady" class="wave-ready hidden"><div class="eyebrow">PREPARE SUAS DEFESAS</div><h3 id="waveReadyTitle">ONDA 1</h3><p id="waveReadyDescription">Construa suas torres antes de iniciar.</p><button class="primary" id="nextWaveBtn">▶ INICIAR ONDA</button></div>
+    <div id="buildInfo" class="build-hint">Selecione uma torre, pague com seu saldo e ganhe dinheiro causando dano!</div>
+    <div class="hud-bottom">
+      <div class="tower-panel"><div class="panel-title"><span>✦ DEFESAS DISPONÍVEIS</span><small id="towerLimitText">GANHE 💰 AO CAUSAR DANO</small></div><div class="tower-options">
+        <button class="tower-option" data-tower="archer"><span class="glyph archer">➶</span><span class="tower-text"><b>ARQUEIRA</b><small>Rápida • alvo único</small><small class="tower-price">💰 --</small></span><kbd>1</kbd></button>
+        <button class="tower-option" data-tower="cannon"><span class="glyph cannon">✹</span><span class="tower-text"><b>CANHÃO</b><small>Explosão em área</small><small class="tower-price">💰 --</small></span><kbd>2</kbd></button>
+        <button class="tower-option" data-tower="ice"><span class="glyph ice">❄</span><span class="tower-text"><b>GELO</b><small>Reduz velocidade</small><small class="tower-price">💰 --</small></span><kbd>3</kbd></button>
+        <button class="tower-option" data-tower="fire"><span class="glyph fire">♨</span><span class="tower-text"><b>FOGO</b><small>Queima inimigos</small><small class="tower-price">💰 --</small></span><kbd>4</kbd></button>
+        <button class="tower-option" data-tower="electric"><span class="glyph electric">ϟ</span><span class="tower-text"><b>ELÉTRICA</b><small>Corrente em cadeia</small><small class="tower-price">💰 --</small></span><kbd>5</kbd></button>
+      </div></div>
+      <div class="context-panel"><div id="selectedTowerTitle" class="context-title">CONSTRUA SUAS TORRES</div><div id="contextDescription">Clique num tipo e depois no mapa. Clique numa torre existente para editar.</div><div id="towerSelection" class="edit-actions hidden"><button id="moveTowerBtn">⇄ MOVER</button><button id="switchTowerBtn">↻ TROCAR</button><button id="removeTowerBtn" class="danger">✕ REMOVER</button></div><button class="text-button" id="cancelBuildBtn">CANCELAR SELEÇÃO · ESC</button></div>
+    </div>
+  </section>
+  <div id="menuBackdrop" class="menu-backdrop"><div class="menu-shimmer"></div></div>
+  <section id="mainMenu" class="screen menu-screen"><header class="menu-top"><div class="brand">☣ <b>OUTPOST STUDIOS</b></div><span>EDIÇÃO 2D • OFFLINE • CHROMEBOOK</span></header><div class="hero"><div class="eyebrow">⚡ A ÚLTIMA LINHA DE DEFESA</div><h1>ZOMBIE<br><em>TOWER DEFENSE</em><sup>2D</sup></h1><p>Comande suas torres e proteja a base contra ondas de zumbis. Cinco territórios, cinco tipos de torres, chefões gigantes e dinheiro conquistado causando dano!</p><div class="hero-actions"><button id="playBtn" class="primary big">▶ COMEÇAR A JOGAR <span>➜</span></button><button id="instructionsBtn" class="outline big">COMO JOGAR</button><button id="settingsBtn" class="outline big">⚙ AJUSTES</button></div><div class="feature-row"><span>✦ 5 MAPAS</span><span>✦ 5 TORRES</span><span>✦ 4 DIFICULDADES</span><span>✦ CHEFÕES</span></div></div><footer class="menu-foot">DEFENDA O NÚCLEO • SEM PERSONAGEM • ECONOMIA POR DANO • OFFLINE</footer></section>
+  <section id="levelScreen" class="screen menu-panel hidden"><div class="content"><button id="levelBack" class="back">← MENU PRINCIPAL</button><div class="eyebrow">ESCOLHA SEU TERRITÓRIO</div><h2>CAMPOS DE <em>BATALHA</em></h2><p>Vença uma fase para desbloquear a próxima. Cada mapa possui caminhos, inimigos e chefões diferentes.</p><div id="levelCards" class="level-cards"></div><div class="note" id="progressNote"></div></div></section>
+  <section id="difficultyScreen" class="screen menu-panel hidden"><div class="content diff-content"><button class="back" id="difficultyBack">← ESCOLHER OUTRA FASE</button><div class="eyebrow">CONFIGURAR MISSÃO</div><h2 id="difficultyTitle">FLORESTA <em>PERDIDA</em></h2><p>Escolha a dificuldade desta fase. Cada mapa é mais difícil que o anterior, até no Fácil. Comece com dinheiro para construir torres. <b>Ganhe mais causando dano</b> aos zumbis e compre novas defesas durante a partida. Não existe limite de torres.</p><div id="difficultyOptions" class="difficulty-grid"><button class="difficulty-choice" data-difficulty="easy"><span>🌿</span><b>FÁCIL</b><small>Hordas menores</small><small class="diff-economy">💰 DINHEIRO INICIAL</small></button><button class="difficulty-choice active" data-difficulty="normal"><span>⚔</span><b>NORMAL</b><small>Defesa equilibrada</small><small class="diff-economy">💰 DINHEIRO INICIAL</small></button><button class="difficulty-choice" data-difficulty="hard"><span>🔥</span><b>DIFÍCIL</b><small>Inimigos mais fortes</small><small class="diff-economy">💰 DINHEIRO INICIAL</small></button><button class="difficulty-choice" data-difficulty="extreme"><span>☠</span><b>EXTREMO</b><small>Grande desafio</small><small class="diff-economy">💰 DINHEIRO INICIAL</small></button></div><p id="difficultyStats" class="note"></p><p class="difficulty-hint">⚔ O Fácil do próximo mapa tem hordas e resistência próximas ao Difícil do anterior.</p><button class="primary big" id="startGameBtn">INICIAR MISSÃO ➜</button></div></section>
+  <div id="modalOverlay" class="modal-overlay hidden"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="eyebrow" id="modalKicker">MISSÃO</div><h2 id="modalTitle">PAUSADO</h2><div id="modalBody"></div><div class="modal-buttons" id="modalButtons"></div></section></div>
+</div>
+<script>
+/* ZOMBIE TOWER DEFENSE 2D
+ * 100% Canvas 2D, sem bibliotecas externas, sem servidor.
+ * Todos os caminhos, cenários, inimigos, torres e interfaces são funcionais.
+ */
+(() => {
+'use strict';
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const TAU=Math.PI*2, W=1280,H=760;
+const rand=(a,b)=>a+Math.random()*(b-a);
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const LEVELS=[
+ {name:'Floresta Perdida',tag:'FLORESTA',emoji:'🌲',waves:5,bg:['#294d40','#152e29'],path:'#806d52',edge:'#ae9971',accent:'#bcf59d',tagline:'Bosques densos, ruínas e trilhas tomadas pelo musgo.',color:'#315e44',boss:'GUARDIÃO DA MATA',route:[[-60,300],[145,300],[280,180],[445,220],[520,420],[685,470],[860,290],[990,340],[1144,380]]},
+ {name:'Cidade Abandonada',tag:'CIDADE',emoji:'🏙️',waves:6,bg:['#4c585c','#28393d'],path:'#505457',edge:'#9aa1a0',accent:'#ffd2a3',tagline:'Asfalto rachado, prédios vazios e veículos esquecidos.',color:'#57666b',boss:'TITÃ DAS RUAS',route:[[-60,355],[190,355],[300,505],[457,505],[545,250],[735,250],[855,475],[1007,475],[1144,380]]},
+ {name:'Deserto Vermelho',tag:'DESERTO',emoji:'🏜️',waves:7,bg:['#be925f','#886447'],path:'#dcad75',edge:'#f0d1a0',accent:'#ffe1a6',tagline:'Cânions, tempestades de areia e monumentos soterrados.',color:'#b98a55',boss:'REI DAS DUNAS',route:[[-60,520],[180,510],[260,260],[435,225],[555,480],[725,522],[875,310],[1020,304],[1144,380]]},
+ {name:'Complexo Industrial',tag:'INDÚSTRIA',emoji:'🏭',waves:8,bg:['#394e50','#233538'],path:'#555e5f',edge:'#bbab83',accent:'#94e5eb',tagline:'Fábricas enferrujadas, reservatórios e tubulações.',color:'#45666a',boss:'COLOSSO DE FERRO',route:[[-60,225],[177,225],[300,460],[468,465],[546,200],[713,211],[819,513],[995,510],[1144,380]]},
+ {name:'Fortaleza Sombria',tag:'FORTALEZA',emoji:'🏰',waves:9,bg:['#48475c','#282b3d'],path:'#696776',edge:'#aea1ba',accent:'#dab4ff',tagline:'Muralhas ancestrais, cristais mágicos e sombras.',color:'#625773',boss:'SENHOR DA HORDA',route:[[-60,395],[160,390],[255,165],[430,167],[580,550],[733,550],[840,265],[1010,263],[1144,380]]}
+];
+const TOWERS={
+ archer:{name:'ARQUEIRA',icon:'➶',color:'#b5ee8d',range:205,fireRate:.43,damage:30,bulletSpeed:730,description:'Ataque rápido e preciso em um único inimigo.'},
+ cannon:{name:'CANHÃO',icon:'✹',color:'#f4b77d',range:185,fireRate:1.72,damage:85,bulletSpeed:470,splash:72,description:'Dano elevado em área, ideal contra grupos.'},
+ ice:{name:'GELO',icon:'❄',color:'#94e9ff',range:175,fireRate:.74,damage:19,bulletSpeed:590,slow:.48,description:'Desacelera inimigos por alguns segundos.'},
+ fire:{name:'FOGO',icon:'♨',color:'#ff9b6e',range:168,fireRate:.44,damage:23,bulletSpeed:580,burn:4.1,description:'Queima os inimigos, causando dano contínuo.'},
+ electric:{name:'ELÉTRICA',icon:'ϟ',color:'#ffeb8c',range:177,fireRate:.89,damage:43,chains:3,description:'Atinge vários inimigos com raios em cadeia.'}
+};
+const DIFF={easy:{name:'FÁCIL',hp:.78,speed:.83,count:.77,damage:.70},normal:{name:'NORMAL',hp:1,speed:1,count:1,damage:1},hard:{name:'DIFÍCIL',hp:1.38,speed:1.15,count:1.25,damage:1.3},extreme:{name:'EXTREMO',hp:1.9,speed:1.33,count:1.58,damage:1.65}};
+// Economia da missão: dinheiro só compra torres, não existe limite numérico.
+// O preço cresce um pouco com a quantidade de torres para evitar spam pesado
+// e cresce suavemente por mapa; o orçamento inicial cresce mais que os preços.
+const ECONOMY={
+ prices:{archer:125,cannon:215,ice:155,fire:175,electric:255},
+ start:520,
+ startDiff:{easy:.90,normal:1,hard:1.24,extreme:1.50},
+ priceDiff:{easy:.94,normal:1,hard:1.06,extreme:1.12},
+ damagePay:{normal:.13,fast:.22,tank:.24,toxic:.20,boss:.35},
+ rewardDiff:{easy:1,normal:1,hard:1.07,extreme:1.14},
+ refund:.60
+};
+function getStartingMoney(stage=currentStage,diff=difficulty){
+ // O orçamento inicial cresce mais nas missões finais: um zumbi no Extremo
+ // da Fortaleza tem muito mais HP e dano que no Fácil da Floresta.
+ const rank={easy:0,normal:1,hard:2,extreme:3}[diff];
+ const lateGameAid=1+stage*stage*rank/16;
+ return Math.round(ECONOMY.start*Math.pow(1.63,stage)*ECONOMY.startDiff[diff]*lateGameAid/5)*5;
+}
+function getTowerPrice(type,stage=currentStage,diff=difficulty,count=towers.length){
+ const pressure=1+.035*Math.max(0,count-3);
+ return Math.ceil(ECONOMY.prices[type]*(1+.19*stage)*ECONOMY.priceDiff[diff]*pressure/5)*5;
+}
+function sellValue(t){return Math.floor(t.paid*ECONOMY.refund/5)*5;}
+function moneyText(value){return Math.floor(value+1e-7).toLocaleString('pt-BR');}
+// A vida e o número de zumbis do Fácil de um mapa correspondem aproximadamente
+// aos do Difícil do mapa anterior. Velocidade e dano crescem mais lentamente
+// para dar tempo de reação às torres e preservar a jogabilidade.
+const STAGE_SCALING=LEVELS.map((_,i)=>({hp:Math.pow(1.75,i),count:Math.pow(1.60,i),speed:Math.pow(1.13,i),damage:Math.pow(1.55,i)}));
+function getStageScaling(stage=currentStage){return STAGE_SCALING[stage];}
+
+const ENEMIES={normal:{hp:87,speed:66,damage:13,r:13,color:'#83a968',shade:'#3d684a'},fast:{hp:61,speed:119,damage:9,r:11,color:'#79c7d3',shade:'#316e8e'},tank:{hp:250,speed:42,damage:27,r:18,color:'#999fa0',shade:'#56646a'},toxic:{hp:138,speed:73,damage:18,r:14,color:'#bd94d4',shade:'#664f91'},boss:{hp:1150,speed:31,damage:90,r:33,color:'#eab4a3',shade:'#954665'}};
+const SAVE_KEY='zombie_td_2d_save_v1';
+let settings={unlocked:0,sound:false,particles:true};
+try{settings={...settings,...JSON.parse(localStorage.getItem(SAVE_KEY)||'{}')}}catch(e){}
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(settings))}catch(e){}}
+let currentStage=0,difficulty='normal',screen='main';
+let autoWave=false,autoWaveCountdown=null;
+let money=0,totalEarned=0;
+let phase='preview',wave=0,baseHp=350,baseMax=350,clock=0,spawnClock=0,spawnQueue=[],enemies=[],towers=[],bullets=[],particles=[],effects=[],decorations=[],road=[],totalLength=0,bgCache=null;
+let selectedType=null,selectedTower=null,movingTower=null,hover=null,drag=false,toastTimer=0,soundCtx=null,lastHUD=0,bossRef=null,lastAmbient=0,bossDefeated=false;
+const canvas=$('gameCanvas'),ctx=canvas.getContext('2d',{alpha:false}),offscreen=document.createElement('canvas');
+const view={width:0,height:0,scale:1,ox:0,oy:0};
+function resize(){
+ view.width=window.innerWidth;view.height=window.innerHeight;
+ const ratio=Math.min(devicePixelRatio||1,2);
+ canvas.width=Math.max(1,Math.round(view.width*ratio));canvas.height=Math.max(1,Math.round(view.height*ratio));
+ canvas.style.width=view.width+'px';canvas.style.height=view.height+'px';
+ view.scale=Math.min(view.width/W,view.height/H);
+ view.ox=(view.width-W*view.scale)/2;view.oy=(view.height-H*view.scale)/2;
+ ctx.setTransform(ratio,0,0,ratio,0,0);
+}
+window.addEventListener('resize',resize);resize();
+function rngFactory(seed){let v=seed>>>0;return()=>{v=(Math.imul(v,1664525)+1013904223)>>>0;return v/4294967296}}
+function rrange(r,a,b){return a+(b-a)*r()}
+function routePoints(anchors){const pts=[];for(let i=0;i<anchors.length-1;i++){
+  const p0=anchors[Math.max(0,i-1)],p1=anchors[i],p2=anchors[i+1],p3=anchors[Math.min(anchors.length-1,i+2)];const n=Math.max(14,Math.round(Math.hypot(p2[0]-p1[0],p2[1]-p1[1])/8));
+  for(let j=0;j<n;j++){const t=j/n,t2=t*t,t3=t2*t;
+   pts.push({x:.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),
+   y:.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)});
+  }
+ }
+ pts.push({x:anchors.at(-1)[0],y:anchors.at(-1)[1]});let length=0;pts[0].s=0;for(let i=1;i<pts.length;i++){length+=dist(pts[i-1],pts[i]);pts[i].s=length;}return {points:pts,length};
+}
+function pointAt(s){s=clamp(s,0,totalLength);let lo=0,hi=road.length-1;while(lo<hi){let m=(lo+hi)>>1;if(road[m].s<s)lo=m+1;else hi=m;}const a=road[Math.max(0,lo-1)],b=road[lo],t=a===b?0:clamp((s-a.s)/(b.s-a.s||1),0,1);return{x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,angle:Math.atan2(b.y-a.y,b.x-a.x)};}
+function segmentDistance(x,y,a,b){const dx=b.x-a.x,dy=b.y-a.y,t=clamp(((x-a.x)*dx+(y-a.y)*dy)/(dx*dx+dy*dy||1),0,1);return Math.hypot(x-a.x-dx*t,y-a.y-dy*t)}
+function distToRoad(x,y){let d=Infinity;for(let i=0;i<road.length-1;i+=3)d=Math.min(d,segmentDistance(x,y,road[i],road[Math.min(i+3,road.length-1)]));return d}
+function canPlace(x,y,ignore=null){if(x<52||x>W-76||y<68||y>H-65)return false;if(Math.hypot(x-1150,y-382)<87)return false;if(distToRoad(x,y)<66)return false;if(towers.some(t=>t!==ignore&&Math.hypot(x-t.x,y-t.y)<56))return false;for(const d of decorations){if((d.kind==='building'||d.kind==='tank'||d.kind==='temple'||d.kind==='warehouse')&&Math.hypot(x-d.x,y-d.y)<d.r+27)return false;}return true;}
+function createMap(stage){currentStage=stage;const route=routePoints(LEVELS[stage].route);road=route.points;totalLength=route.length;generateDecorations();renderBackground();}
+function generateDecorations(){decorations=[];const r=rngFactory(4009+currentStage*177),n=[220,110,155,112,138][currentStage];
+ const rules=[{tree:.58,shrub:.18,rock:.12,log:.08,ruin:.04},{building:.48,car:.19,light:.15,rubble:.18},{cactus:.29,rock:.32,dune:.20,temple:.07,shrub:.12},{warehouse:.28,tank:.23,pipe:.20,barrel:.19,rock:.10},{tower:.28,crystal:.24,rock:.17,torch:.13,ruin:.18}][currentStage];
+ for(let i=0;i<n*7&&decorations.length<n;i++){
+  const x=rrange(r,20,1260),y=rrange(r,28,735),size=rrange(r,.7,1.35);
+  if(distToRoad(x,y)<rrange(r,65,95)||Math.hypot(x-1150,y-382)<110)continue;
+  const z=r();let p=0,kind=Object.keys(rules).find(k=>(p+=rules[k])>z)||'rock';
+  const rs={tree:18,shrub:14,rock:14,log:15,ruin:24,building:38,car:25,light:11,rubble:17,cactus:13,dune:25,temple:37,warehouse:40,tank:28,pipe:26,barrel:13,tower:36,crystal:18,torch:14}[kind]||12;
+  const radius=rs*size;if(decorations.some(d=>Math.hypot(x-d.x,y-d.y)<(radius+d.r)*.66))continue;
+  decorations.push({x,y,kind,size,r:radius,shade:rrange(r,-1,1),rot:rrange(r,-.4,.4),v:r()});
+ }
+ decorations.sort((a,b)=>a.y-b.y);
+}
+function resetGame(){autoWave=false;autoWaveCountdown=null;updateAutoWaveButton();money=getStartingMoney();totalEarned=0;wave=0;clock=0;spawnClock=0;spawnQueue=[];enemies=[];towers=[];bullets=[];particles=[];effects=[];bossRef=null;bossDefeated=false;selectedType=null;selectedTower=null;movingTower=null;phase='intermission';baseMax=350;baseHp=baseMax;createMap(currentStage);showReady();updateHUD(true);updateTools();}
+function openScreen(which){screen=which;['mainMenu','levelScreen','difficultyScreen'].forEach((id,i)=>$(id).classList.toggle('hidden',['main','levels','difficulty'][i]!==which));$('menuBackdrop').classList.toggle('hidden',which==='game');$('hud').classList.toggle('hidden',which!=='game');if(which!=='game'){$('modalOverlay').classList.add('hidden');selectedType=null;}updateTools();}
+function showLevels(){const container=$('levelCards');container.innerHTML='';LEVELS.forEach((l,i)=>{let unlocked=i<=settings.unlocked,card=document.createElement('button');card.className='level-card'+(unlocked?'':' locked');card.disabled=!unlocked;card.innerHTML=`<div class="level-art" style="background:linear-gradient(135deg,${l.color},#142a31)"><span>${unlocked?l.emoji:'🔒'}</span></div><div class="level-info"><b>${i+1}. ${l.name}</b><small>${l.waves} ondas • ${unlocked?'DISPONÍVEL':'BLOQUEADA'}</small><small>${l.tagline}</small></div>`;card.addEventListener('click',()=>{currentStage=i;createMap(i);$('difficultyTitle').textContent=l.name.toUpperCase();updateDifficultyPreview();openScreen('difficulty');});container.appendChild(card)});$('progressNote').textContent=`PROGRESSO SALVO • ${Math.min(settings.unlocked+1,5)} DE 5 FASES DESBLOQUEADAS`;openScreen('levels');}
+function updateDifficultyPreview(){
+ const l=LEVELS[currentStage];
+ $('difficultyStats').textContent=`${l.waves} ONDAS • 💰 ${moneyText(getStartingMoney())} INICIAIS • SEM LIMITE DE TORRES • CHEFÃO: ${l.boss}`;
+ document.querySelectorAll('.difficulty-choice').forEach(el=>{
+   const starting=getStartingMoney(currentStage,el.dataset.difficulty);
+   el.querySelector('.diff-economy').textContent=`💰 ${moneyText(starting)} INICIAIS`;
+   el.classList.toggle('active',el.dataset.difficulty===difficulty);
+ });
+}
+function enterGame(){resetGame();openScreen('game');updateHUD(true);showToast('Você começa com 💰 '+moneyText(money)+'. Ataque zumbis para ganhar mais!');}
+function showToast(message){const t=$('toast');t.textContent=message;t.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('visible'),2400)}
+function showModal(kicker,title,html,buttons){$('modalKicker').textContent=kicker;$('modalTitle').innerHTML=title;$('modalBody').innerHTML=html;const out=$('modalButtons');out.innerHTML='';buttons.forEach(b=>{const el=document.createElement('button');el.textContent=b.label;el.className=b.cls||'';el.onclick=()=>{if(b.close!==false)$('modalOverlay').classList.add('hidden');b.action?.();};out.appendChild(el)});$('modalOverlay').classList.remove('hidden');}
+function showInstructions(){showModal('INSTRUÇÕES','COMO <em>JOGAR</em>',`<p><b>Não existe personagem:</b> você controla as torres e defende a base.</p><ul><li>Escolha uma torre (teclas <b>1 a 5</b>) e clique em um local livre do mapa para construí-la.</li><li>Você começa com um <b>saldo inicial</b>, ajustado ao mapa e à dificuldade. <b>Não existe limite de torres</b>: construa quantas conseguir pagar e posicionar.</li><li>As torres ganham <b>dinheiro por dano real</b> aos zumbis. Inimigos resistentes, especiais e chefões pagam mais. Você pode gastar durante as ondas ou entre elas.</li><li>Clique em uma torre para <b>mover gratuitamente, trocar de tipo pagando o custo ou remover e recuperar 60% do preço pago</b>.</li><li>A cada novo mapa, os inimigos ficam mais resistentes e numerosos, mesmo no Fácil.</li><li>Quando estiver pronto, clique em <b>INICIAR ONDA</b>. A próxima onda pode ser iniciada manualmente ou automaticamente pelo botão <b>AUTO WAVE</b> (ON/OFF), com contagem regressiva entre ondas.</li><li>Defenda a base até derrotar o chefão da última onda. Pressione <b>Esc</b> para pausar ou cancelar uma seleção.</li></ul>`,[{label:'ENTENDI',cls:'primary'}]);}
+function showSettings(){showModal('PREFERÊNCIAS','AJUSTES',`<div class="switch"><span>🔊 Efeitos sonoros</span><button id="setSound">${settings.sound?'LIGADO':'DESLIGADO'}</button></div><div class="switch"><span>✨ Partículas visuais</span><button id="setParticles">${settings.particles?'LIGADAS':'DESLIGADAS'}</button></div><p>As opções e a progressão ficam salvas neste navegador. Não é necessária conexão com a internet.</p>`,[{label:'FECHAR',cls:'primary'}]);$('setSound').onclick=()=>{settings.sound=!settings.sound;save();$('setSound').textContent=settings.sound?'LIGADO':'DESLIGADO';updateSoundIcon();};$('setParticles').onclick=()=>{settings.particles=!settings.particles;save();$('setParticles').textContent=settings.particles?'LIGADAS':'DESLIGADAS';};}
+function showPause(){if(screen!=='game'||phase==='won'||phase==='lost')return;if(phase!=='paused'){phaseBeforePause=phase;phase='paused';showModal('INTERVALO','JOGO <em>PAUSADO</em>','<p>Sua defesa está em segurança enquanto o jogo estiver pausado.</p>',[{label:'▶ CONTINUAR',cls:'primary',action:()=>{phase=phaseBeforePause;}},{label:'↻ REINICIAR',action:()=>enterGame()},{label:'⌂ MENU PRINCIPAL',cls:'danger',action:()=>{phase='preview';openScreen('main');createMap(currentStage);}}]);}}
+let phaseBeforePause='intermission';
+// Auto Wave só avança quando NÃO há zumbis vivos nem novos zumbis a gerar.
+// A contagem é controlada pelo tempo da partida para congelar durante a pausa.
+const AUTO_WAVE_DELAY=3.5;
+function updateAutoWaveButton(){const btn=$('autoWaveBtn');btn.textContent=autoWave?'⚡ AUTO WAVE: ON':'⚡ AUTO WAVE: OFF';btn.classList.toggle('active',autoWave);btn.setAttribute('aria-pressed',String(autoWave));}
+function updateReadyMessage(){
+ $('waveReadyTitle').textContent='ONDA '+(wave+1);
+ const finalWave=wave+1===LEVELS[currentStage].waves;
+ const standard=finalWave?'A última onda traz o chefão! Reforce suas torres.':'Construa, mova ou reposicione suas torres antes de continuar.';
+ $('waveReadyDescription').textContent=autoWave&&autoWaveCountdown!==null?`⚡ Auto Wave: próxima onda em ${Math.max(1,Math.ceil(autoWaveCountdown))}s. ${standard}`:standard;
+ $('nextWaveBtn').textContent=wave===0?'▶ INICIAR PRIMEIRA ONDA':'▶ INICIAR PRÓXIMA ONDA';
+}
+function showReady(){phase='intermission';autoWaveCountdown=autoWave?AUTO_WAVE_DELAY:null;$('waveReady').classList.remove('hidden');updateReadyMessage();}
+function tickAutoWave(dt){if(!autoWave||autoWaveCountdown===null||screen!=='game'||phase!=='intermission')return;
+ const previous=Math.ceil(autoWaveCountdown);autoWaveCountdown-=dt;
+ if(autoWaveCountdown<=0){autoWaveCountdown=null;prepareWave();return;}
+ if(Math.ceil(autoWaveCountdown)!==previous)updateReadyMessage();
+}
+
+function prepareWave(){if(screen!=='game'||phase!=='intermission')return;autoWaveCountdown=null;wave++;$('waveReady').classList.add('hidden');phase='active';spawnQueue=[];spawnClock=0;const diff=DIFF[difficulty],stage=getStageScaling();let count=Math.max(1,Math.round((7+wave*3.6)*diff.count*stage.count));for(let i=0;i<count;i++){let type='normal';const roll=Math.random();if(wave>=2&&roll<.25)type='fast';else if(wave>=3&&roll<.43)type='tank';else if(wave>=4&&roll<.59)type='toxic';spawnQueue.push(type);}if(wave===LEVELS[currentStage].waves)spawnQueue.push('boss');showToast(wave===LEVELS[currentStage].waves?'☠ ONDA FINAL: CHEFÃO A CAMINHO!':'⚔ ONDA '+wave+' INICIADA!');sound(270,.10);updateHUD(true);}
+function spawnEnemy(type){const spec=ENEMIES[type],diff=DIFF[difficulty],stage=getStageScaling(),boss=type==='boss';const hp=spec.hp*diff.hp*stage.hp*(1+Math.max(0,wave-1)*.13)*(boss?1.3:1);const e={type,x:-90,y:400,progress:0,hp,maxHp:hp,speed:spec.speed*diff.speed*stage.speed,damage:spec.damage*diff.damage*stage.damage,r:spec.r,burnUntil:0,slowUntil:0,burnDps:0,bossPulse:6,spawnedMinions:0,alive:true,angle:0,seed:rand(0,TAU),id:++nextEnemyId};const p=pointAt(0);e.x=p.x;e.y=p.y;enemies.push(e);if(boss){bossRef=e;sound(95,.32);showToast('☠ '+LEVELS[currentStage].boss+' ENTROU NO MAPA!');}}
+let nextEnemyId=0,nextTowerId=0;
+function damageEnemy(e,damage,kind){if(!e||!e.alive||damage<=0)return;
+ // O jogador recebe apenas por HP realmente removido, nunca pelo excesso de dano.
+ // A bonificação por classe não é recebida ao deixar um zumbi passar.
+ const effective=Math.min(e.hp,damage);
+ if(effective<=0)return;
+ const reward=effective*ECONOMY.damagePay[e.type]*ECONOMY.rewardDiff[difficulty]*(1+.035*currentStage);
+ money+=reward;totalEarned+=reward;
+ e.hp-=effective;if(settings.particles&&Math.random()<.75)particles.push({x:e.x+rand(-6,6),y:e.y+rand(-7,7),vx:rand(-32,32),vy:rand(-65,-22),life:.35,max:.35,color:kind==='fire'?'#ffab68':kind==='ice'?'#b4f4ff':'#e6f7d6',radius:rand(2,4)});if(e.hp<=0){e.hp=0;e.alive=false;effects.push({kind:'poof',x:e.x,y:e.y,life:.32,max:.32,color:ENEMIES[e.type].color,r:e.r});if(e.type==='boss'){bossDefeated=true;sound(380,.18);bossRef=null;showToast('☠ CHEFÃO DERROTADO!');}}}
+function targetEnemy(t){let chosen=null,far=-1;const range=TOWERS[t.type].range;for(const e of enemies){if(e.alive&&Math.hypot(e.x-t.x,e.y-t.y)<=range&&e.progress>far){far=e.progress;chosen=e;}}return chosen;}
+function aimAndShoot(t,e){const conf=TOWERS[t.type];t.angle=Math.atan2(e.y-t.y,e.x-t.x);t.flash=.14;if(t.type==='electric'){
+  const chain=[e];for(let i=1;i<conf.chains;i++){let last=chain.at(-1),best=null,bestDist=120;for(const other of enemies){let d=Math.hypot(other.x-last.x,other.y-last.y);if(other.alive&&!chain.includes(other)&&d<bestDist){best=other;bestDist=d;}}if(best)chain.push(best);else break;}
+  let sx=t.x,sy=t.y;chain.forEach((victim,i)=>{damageEnemy(victim,conf.damage*Math.pow(.77,i),'electric');effects.push({kind:'beam',x:sx,y:sy,x2:victim.x,y2:victim.y,life:.22,max:.22,color:conf.color});sx=victim.x;sy=victim.y;});sound(570,.07);return;
+ }
+ bullets.push({x:t.x+Math.cos(t.angle)*19,y:t.y+Math.sin(t.angle)*19,target:e,type:t.type,damage:conf.damage,speed:conf.bulletSpeed,life:3,color:conf.color,trail:[]});if(t.type==='cannon')sound(115,.12);else if(t.type==='archer')sound(460,.035);
+}
+function impact(b,e){const conf=TOWERS[b.type];if(b.type==='cannon'){
+  effects.push({kind:'blast',x:b.x,y:b.y,r:conf.splash,life:.35,max:.35,color:'#ffba7d'});
+  for(const other of enemies)if(other.alive&&Math.hypot(other.x-b.x,other.y-b.y)<conf.splash+other.r)damageEnemy(other,b.damage*(other===e?1:.65),'cannon');
+  sound(105,.15);
+ }else{damageEnemy(e,b.damage,b.type);if(b.type==='ice')e.slowUntil=Math.max(e.slowUntil,clock+2.9);if(b.type==='fire'){e.burnUntil=Math.max(e.burnUntil,clock+conf.burn);e.burnDps=15+currentStage*2;}}
+ if(settings.particles){for(let i=0;i<(b.type==='cannon'?17:5);i++)particles.push({x:b.x,y:b.y,vx:rand(-110,110),vy:rand(-110,110),life:rand(.18,.58),max:.58,color:b.color,radius:rand(2,4)});}}
+function updateGame(dt){clock+=dt;
+ if(spawnQueue.length){spawnClock-=dt;if(spawnClock<=0&&enemies.filter(e=>e.alive).length<78){const type=spawnQueue.shift();spawnEnemy(type);spawnClock=type==='boss'?1.3:clamp(.71-currentStage*.03-(wave-1)*.026,.34,.75);}}
+ for(const e of enemies){if(!e.alive)continue;
+  if(e.burnUntil>clock)damageEnemy(e,e.burnDps*dt,'fire');if(!e.alive)continue;
+  const slowed=e.slowUntil>clock?.48:1;e.progress+=e.speed*slowed*dt;let p=pointAt(e.progress);e.x=p.x;e.y=p.y;e.angle=p.angle;
+  if(e.type==='boss'){e.bossPulse-=dt;if(e.bossPulse<=0){e.bossPulse=6.5;effects.push({kind:'pulse',x:e.x,y:e.y,r:170,life:.7,max:.7,color:'#f5a0ca'});for(const tower of towers){if(Math.hypot(tower.x-e.x,tower.y-e.y)<170)tower.stunned=clock+1.65;}showToast('⚡ O CHEFÃO ATORDOOU AS TORRES PRÓXIMAS!');sound(140,.22);}if(e.hp<e.maxHp*.55&&e.spawnedMinions<1){e.spawnedMinions=1;for(let k=0;k<3;k++){const mType=k===0?'tank':'fast';spawnEnemy(mType);let minion=enemies.at(-1);minion.progress=Math.max(0,e.progress-28-38*k);}}}
+  if(e.progress>=totalLength-5){e.alive=false;if(e.type==='boss'){baseHp=0;bossRef=null;endGame(false);return;}baseHp=Math.max(0,baseHp-e.damage);effects.push({kind:'blast',x:1150,y:380,r:49,life:.5,max:.5,color:'#ff6868'});sound(100,.09);if(baseHp<=0){endGame(false);return;}}
+ }
+ for(const t of towers){t.cooldown-=dt;t.flash=Math.max(0,t.flash-dt);if(t.stunned>clock)continue;if(t.cooldown<=0){const target=targetEnemy(t);if(target){aimAndShoot(t,target);t.cooldown=TOWERS[t.type].fireRate;}}}
+ for(const b of bullets){b.life-=dt;if(b.life<=0)continue;if(b.target.alive){const target=b.target,dx=target.x-b.x,dy=target.y-b.y,d=Math.hypot(dx,dy),step=Math.min(d,b.speed*dt);b.x+=dx/(d||1)*step;b.y+=dy/(d||1)*step;if(step>=d-1||d<target.r+6){impact(b,target);b.life=-1;}}else{b.life=-1;}}
+ enemies=enemies.filter(e=>e.alive);bullets=bullets.filter(b=>b.life>0);tickFX(dt);
+ if(!spawnQueue.length&&enemies.length===0){if(wave===LEVELS[currentStage].waves){endGame(bossDefeated);return;}showReady();showToast('✓ ONDA '+wave+' CONCLUÍDA!');}
+ updateHUD();}
+function tickFX(dt){for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=90*dt;p.life-=dt;}particles=particles.filter(p=>p.life>0).slice(-240);for(const e of effects)e.life-=dt;effects=effects.filter(e=>e.life>0).slice(-60);}
+function endGame(won){phase=won?'won':'lost';$('waveReady').classList.add('hidden');updateHUD(true);if(won){settings.unlocked=Math.max(settings.unlocked,Math.min(4,currentStage+1));save();showModal('TERRITÓRIO DEFENDIDO','MISSÃO <em>CONCLUÍDA!</em>',`<p>Você venceu <b>${LEVELS[currentStage].name}</b> e derrotou <b>${LEVELS[currentStage].boss}</b>!</p><p>Base restante: <b>${Math.ceil(baseHp)} / ${baseMax}</b> • Dificuldade: <b>${DIFF[difficulty].name}</b>.</p>`,[{label:currentStage<4?'PRÓXIMA FASE ➜':'VER FASES',cls:'primary',action:()=>{if(currentStage<4){currentStage++;createMap(currentStage);$('difficultyTitle').textContent=LEVELS[currentStage].name.toUpperCase();updateDifficultyPreview();openScreen('difficulty');}else showLevels();}},{label:'REJOGAR',action:()=>enterGame()},{label:'MENU',action:()=>{openScreen('main');createMap(currentStage)}}]);}else{showModal('A BASE FOI DESTRUÍDA','GAME <em>OVER</em>',`<p>Os zumbis atravessaram suas defesas na onda <b>${wave}</b>.</p><p>Dinheiro recebido por dano: <b>💰 ${moneyText(totalEarned)}</b>. Invista em mais torres ao longo das ondas; gelo desacelera, canhão atinge grupos e elétrica encadeia ataques.</p>`,[{label:'↻ TENTAR NOVAMENTE',cls:'primary',action:()=>enterGame()},{label:'ESCOLHER FASE',action:()=>showLevels()}]);}}
+function updateHUD(force=false){if(screen!=='game')return;if(!force&&clock-lastHUD<.07)return;lastHUD=clock;$('hudMap').textContent=LEVELS[currentStage].emoji+' '+LEVELS[currentStage].tag;$('hudWave').textContent='ONDA '+Math.max(wave,1)+'/'+LEVELS[currentStage].waves;$('hudDifficulty').textContent=DIFF[difficulty].name;$('hudEnemies').textContent=(spawnQueue.length+enemies.length);$('hudTowersCount').textContent=towers.length;$('hudMoney').textContent='💰 '+moneyText(money);$('towerLimitText').textContent='GANHE 💰 AO CAUSAR DANO';
+ document.querySelectorAll('.tower-option').forEach(el=>{const type=el.dataset.tower,price=getTowerPrice(type);el.querySelector('.tower-price').textContent='💰 '+moneyText(price);el.classList.toggle('unaffordable',money+1e-7<price);});$('baseNumber').textContent=Math.ceil(baseHp)+' / '+baseMax;$('baseBar').style.width=(baseHp/baseMax*100)+'%';$('baseBar').style.background=baseHp<baseMax*.3?'linear-gradient(90deg,#d5494d,#ffba74)':'linear-gradient(90deg,#5cbd7c,#b9f18a)';$('bossHud').classList.toggle('hidden',!bossRef||!bossRef.alive);if(bossRef&&bossRef.alive){$('bossName').textContent=LEVELS[currentStage].boss;$('bossHp').textContent=Math.ceil(bossRef.hp/bossRef.maxHp*100)+'%';$('bossBar').style.width=clamp(bossRef.hp/bossRef.maxHp*100,0,100)+'%';}
+ $('buildInfo').textContent=movingTower?'Clique no terreno válido para mover a torre sem custo. Esc cancela.':selectedType?`${TOWERS[selectedType].name}: 💰 ${moneyText(getTowerPrice(selectedType))} • SALDO 💰 ${moneyText(money)} • Clique no terreno livre.`:`💰 SALDO ${moneyText(money)} • ${towers.length} torres • Ganhe dinheiro causando dano e construa quantas conseguir pagar.`;}
+function sound(frequency,duration){if(!settings.sound)return;try{soundCtx??=new (window.AudioContext||window.webkitAudioContext)();const o=soundCtx.createOscillator(),gain=soundCtx.createGain();o.type='triangle';o.frequency.setValueAtTime(frequency,soundCtx.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(frequency*.6,25),soundCtx.currentTime+duration);gain.gain.setValueAtTime(.028,soundCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,soundCtx.currentTime+duration);o.connect(gain);gain.connect(soundCtx.destination);o.start();o.stop(soundCtx.currentTime+duration);}catch(e){}}
+function updateSoundIcon(){$('soundBtn').textContent=settings.sound?'♫':'♪̸';$('soundBtn').title=settings.sound?'Desativar som':'Ativar som';}
+// ---------- VISUAL 2D: cenário pintado apenas uma vez por fase ----------
+function pathDraw(c){c.beginPath();road.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));}
+function line(c,x1,y1,x2,y2,color,width){c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.lineWidth=width;c.strokeStyle=color;c.stroke();}
+function ellipse(c,x,y,rx,ry,fill,rot=0){c.save();c.translate(x,y);c.rotate(rot);c.beginPath();c.ellipse(0,0,rx,ry,0,0,TAU);c.fillStyle=fill;c.fill();c.restore()}
+function poly(c,pts,color,stroke=null,lw=1){c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath();c.fillStyle=color;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=lw;c.stroke()}}
+function rounded(c,x,y,w,h,r,fill,stroke=null,lw=1){c.beginPath();c.roundRect(x,y,w,h,r);c.fillStyle=fill;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=lw;c.stroke()}}
+function drawTerrain(c,level,random){const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,level.bg[0]);g.addColorStop(1,level.bg[1]);c.fillStyle=g;c.fillRect(0,0,W,H);
+ for(let j=0;j<1900;j++){let x=random()*W,y=random()*H,r=rrange(random,1,24);const palette=[['#8fc28a','#0e302c','#c6a578'],['#819596','#1d3033','#9c9790'],['#ffe0a2','#9b693f','#dfbd83'],['#819897','#1c3d41','#bd8b67'],['#857898','#2a2449','#9e8daa']][currentStage];c.globalAlpha=rrange(random,.025,.18);ellipse(c,x,y,r,r*.58,palette[Math.floor(random()*3)],random()*TAU);}c.globalAlpha=1;
+ // caminhos de pedras, fissuras, folhas, grãos de areia, rejunte etc.
+ for(let i=0;i<950;i++){const x=random()*W,y=random()*H;
+  if(currentStage===0){c.fillStyle=random()<.6?'#8fbc71':'#d9b994';c.globalAlpha=.29;ellipse(c,x,y,rrange(random,1,3),rrange(random,1,3),c.fillStyle)}
+  else if(currentStage===1||currentStage===3){c.strokeStyle=random()<.5?'#aec1bc':'#1a2e34';c.lineWidth=rrange(random,.4,1.5);c.globalAlpha=.13;c.beginPath();c.moveTo(x,y);c.lineTo(x+rrange(random,-13,13),y+rrange(random,-7,7));c.stroke()}
+  else if(currentStage===2){c.strokeStyle='#f5d7a1';c.globalAlpha=.19;c.lineWidth=1;c.beginPath();c.arc(x,y,rrange(random,2,13),.2,2.8);c.stroke()}
+  else{c.fillStyle=random()<.4?'#c1b6d0':'#1b1b32';c.globalAlpha=.17;ellipse(c,x,y,rrange(random,1,5),rrange(random,1,4),c.fillStyle)}
+ }c.globalAlpha=1;
+ // detalhes estruturais por mapa, no limite do mapa
+ if(currentStage===1||currentStage===3){c.strokeStyle='#a6b5b22c';c.lineWidth=1;for(let x=0;x<W;x+=70){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}for(let y=0;y<H;y+=70){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}}
+ if(currentStage===4){c.lineWidth=14;c.strokeStyle='#302b41';c.strokeRect(11,10,W-22,H-20);c.lineWidth=6;c.strokeStyle='#7b7188';c.strokeRect(19,18,W-38,H-36);for(let i=0;i<28;i++){let y=28+i*29;rounded(c,6,y,31,18,2,i%2?'#696276':'#514c65');rounded(c,W-37,y,31,18,2,i%2?'#696276':'#514c65')}}
+}
+function drawRoad(c,l,random){c.save();c.lineCap='round';c.lineJoin='round';c.shadowColor='#0000006b';c.shadowBlur=14;c.shadowOffsetY=8;pathDraw(c);c.strokeStyle='#1b2023bb';c.lineWidth=104;c.stroke();c.shadowBlur=0;c.shadowOffsetY=0;pathDraw(c);c.strokeStyle=l.edge;c.lineWidth=98;c.stroke();pathDraw(c);c.strokeStyle=l.path;c.lineWidth=86;c.stroke();pathDraw(c);c.strokeStyle=currentStage===2?'#aa7d54':currentStage===0?'#695b44':'#353e47';c.lineWidth=72;c.globalAlpha=.31;c.stroke();c.globalAlpha=1;
+ if(currentStage===1||currentStage===3||currentStage===4){c.setLineDash([25,25]);c.lineDashOffset=0;pathDraw(c);c.lineWidth=3;c.strokeStyle=currentStage===4?'#c3b5d0a0':'#f6edc5a8';c.stroke();c.setLineDash([])}
+ // desgaste interno da estrada, pontos, pedras e folhas
+ for(let i=0;i<850;i++){const p=pointAt(random()*totalLength),o=(random()-.5)*76,x=p.x+Math.cos(p.angle+Math.PI/2)*o,y=p.y+Math.sin(p.angle+Math.PI/2)*o;if(x<0||x>W||y<0||y>H)continue;c.globalAlpha=rrange(random,.1,.38);ellipse(c,x,y,rrange(random,.6,3.4),rrange(random,.5,1.8),currentStage===2?'#fbe8be':currentStage===0?'#c7b18e':'#c6c3b4',random()*TAU)}c.globalAlpha=1;
+ for(let s=140;s<totalLength-80;s+=190){const p=pointAt(s);c.save();c.translate(p.x,p.y);c.rotate(p.angle);poly(c,[[13,0],[-9,-11],[-3,0],[-9,11]],currentStage===2?'#fff0c291':'#e2f3d58a');c.restore()}
+ c.restore();}
+function drawDecor(c,d){const x=d.x,y=d.y,s=d.size;c.save();c.translate(x,y);c.rotate(d.rot);c.scale(s,s);const k=d.kind;
+ const sh=(w=22,h=10)=>ellipse(c,6,9,w,h,'#00191c4b',0);
+ switch(k){
+ case 'tree':{
+  sh(27,13);c.fillStyle='#715849';c.fillRect(-3,2,7,15);
+  if(d.v>.46){poly(c,[[0,-38],[-22,5],[22,5]],'#284e3c','#17392f',2);poly(c,[[0,-29],[-20,11],[20,11]],'#3b7654','#244f3f',2);poly(c,[[0,-18],[-17,16],[18,16]],'#43845e','#2c5d46',2);line(c,-6,-6,5,-21,'#98c88b66',2)}
+  else{ellipse(c,0,-6,25,21,'#244c39');ellipse(c,-13,-10,17,19,'#3d8057');ellipse(c,14,-9,18,18,'#4b9864');ellipse(c,-2,-19,18,17,'#589a67');ellipse(c,-8,-24,6,4,'#a5d2a07a')}
+  break;}
+ case 'shrub':sh(16,6);for(let i=0;i<5;i++){const a=i/5*TAU;ellipse(c,Math.cos(a)*8,Math.sin(a)*7-2,10,9,['#366347','#52784a','#2b593f'][i%3])}break;
+ case 'rock':sh();poly(c,[[-18,0],[-9,-14],[9,-17],[22,-4],[11,12],[-11,11]],currentStage===2?'#9c765e':currentStage===4?'#6c667c':'#687c77','#2d3c44',1.4);poly(c,[[-18,0],[-9,-14],[9,-17],[3,-2]],'#ffffff27');break;
+ case 'log':sh(19,7);rounded(c,-24,-7,47,14,5,'#6c4b32','#3c2d26',2);line(c,-18,-4,15,-4,'#aa8260',2);ellipse(c,22,0,5,7,'#a17c5a');break;
+ case 'ruin':sh(26,15);rounded(c,-23,-20,45,36,2,currentStage===4?'#6c657b':'#747f73','#354348',3);rounded(c,-13,-23,23,28,2,'#283b3cc9');rounded(c,-28,10,16,10,1,'#919e96');break;
+ case 'building':{
+  sh(52,30);rounded(c,-37,-29,74,58,3,'#1b3438','#111f26',4);rounded(c,-33,-29,65,50,2,d.v>.5?'#657778':'#778485','#b9ae96',3);
+  line(c,-27,-17,26,-17,'#c4c9bd55',2);rounded(c,-13,-7,27,21,2,'#35494b','#9faeaa',2);rounded(c,-26,12,17,8,1,'#4b5858');rounded(c,15,12,10,8,1,'#b5a993');line(c,-30,-26,29,-26,'#ffffff55',2);break;}
+ case 'car':sh(26,11);rounded(c,-22,-13,46,26,7,d.v>.5?'#526b73':'#775a50','#1c353a',2);rounded(c,-8,-11,16,22,3,'#8da6ae','#344d54',2);line(c,-18,-9,-18,9,'#e8e1ce',2);line(c,18,-9,18,9,'#e8e1ce',2);break;
+ case 'light':sh(11,5);ellipse(c,0,0,7,7,'#4f5d64');line(c,0,0,6,-23,'#293c42',5);ellipse(c,6,-23,7,4,'#ffe9b3');ellipse(c,6,-23,15,11,'#ffca6644');break;
+ case 'rubble':sh(19,9);for(let i=0;i<5;i++){const a=i/5*TAU,r=7+i*2;rounded(c,Math.cos(a)*r-7,Math.sin(a)*r-4,12,8,1,['#7a8685','#b6aaa0','#596c6a'][i%3]);}break;
+ case 'cactus':sh(14,6);rounded(c,-5,-26,10,37,5,'#427a60','#2c5d47',2);rounded(c,-18,-13,16,8,4,'#4e956f');rounded(c,-18,-21,8,17,4,'#4e956f');rounded(c,4,-5,17,8,4,'#4a8968');rounded(c,14,-16,7,17,3,'#4a8968');line(c,-2,-22,-2,3,'#94ca8299',2);break;
+ case 'dune':sh(35,10);ellipse(c,0,0,34,16,'#ebbd82');c.strokeStyle='#ffe5ab';c.lineWidth=3;c.beginPath();c.arc(-1,-4,27,3.5,5.8);c.stroke();break;
+ case 'temple':sh(44,26);rounded(c,-30,-23,62,49,2,'#946d56','#704b3d',3);rounded(c,-24,-16,49,36,1,'#d0ae7f');for(let i=-1;i<=1;i++){rounded(c,i*18-5,-26,10,51,2,'#dfbe8f','#916c52',2);}rounded(c,-12,-8,24,19,1,'#6f5444');break;
+ case 'warehouse':sh(55,31);rounded(c,-40,-26,82,52,3,'#263f42','#1a2e34',3);rounded(c,-35,-20,71,42,3,d.v>.5?'#647577':'#778380');for(let i=-24;i<35;i+=13)line(c,i,-20,i,22,'#b2b7aa73',2);rounded(c,-14,-8,26,18,2,'#30494f','#9da8a4',2);break;
+ case 'tank':sh(31,14);ellipse(c,0,0,27,25,'#324d4d','#283d43');ellipse(c,0,-4,25,22,'#83958d');ellipse(c,0,-6,17,14,'#50686a');ellipse(c,0,-6,9,7,'#aebdb5');line(c,-25,0,24,0,'#d1c5a55a',2);break;
+ case 'pipe':sh(23,12);line(c,-24,-12,15,-12,'#778c8c',11);line(c,15,-17,15,20,'#778c8c',11);line(c,-24,-15,15,-15,'#c1d4c7',3);line(c,12,-17,12,18,'#b9beb3',3);break;
+ case 'barrel':sh(17,9);for(let j=0;j<3;j++){ellipse(c,j*10-8,j%2*5-3,9,10,['#b37b56','#6e8581','#a9764e'][j]);ellipse(c,j*10-8,j%2*5-5,8,5,'#25383b')};break;
+ case 'tower':sh(42,22);rounded(c,-32,-27,64,57,4,'#29283f','#16192e',3);rounded(c,-28,-25,56,52,2,'#756f87','#a59ab0',3);for(let i=-1;i<=1;i++)rounded(c,i*21-7,-37,15,15,1,'#868096');rounded(c,-8,-12,18,25,3,'#372f56');break;
+ case 'crystal':sh(20,10);poly(c,[[0,-31],[14,-8],[3,12],[-13,0]],'#ad8add','#4d3e88',2);poly(c,[[0,-31],[-13,0],[3,12]],'#e1c8ff');ellipse(c,0,-5,16,20,'#a980fb24');break;
+ case 'torch':sh(10,6);rounded(c,-8,-7,16,15,3,'#726371');ellipse(c,0,-12,8,13,'#f3a36b');ellipse(c,1,-15,4,7,'#fff0a9');break;
+ }
+ c.restore();}
+function drawBase(c){const x=1151,y=380;ellipse(c,x+6,y+12,77,47,'#000a');
+ // Plataforma fortificada, reator protegido por pilares
+ ellipse(c,x,y,79,69,'#172d35');ellipse(c,x,y,70,61,'#829c95');ellipse(c,x,y,58,51,'#304d50');ellipse(c,x,y,44,38,'#132d31');
+ for(let i=0;i<8;i++){const a=TAU*i/8;let px=x+Math.cos(a)*65,py=y+Math.sin(a)*57;rounded(c,px-8,py-8,16,16,3,'#8ca99c','#1e343d',2);}
+ c.save();c.translate(x,y);c.rotate(clock*.18);c.strokeStyle=LEVELS[currentStage].accent+'ac';c.lineWidth=3;c.setLineDash([14,12]);c.beginPath();c.ellipse(0,0,32,30,0,0,TAU);c.stroke();c.restore();
+ ellipse(c,x,y,22+Math.sin(clock*2)*2,22+Math.sin(clock*2)*2,LEVELS[currentStage].accent+'44');ellipse(c,x,y,18,18,'#b8fff0');ellipse(c,x-4,y-6,8,7,'#f5fff6');
+ c.fillStyle='#06252c';c.font='900 12px system-ui';c.textAlign='center';c.fillText('BASE',x,y+87);c.textAlign='left';}
+function drawGate(c){const p=pointAt(64);c.save();c.translate(p.x,p.y);c.rotate(p.angle);rounded(c,-14,-45,18,90,4,'#372d37','#151c22',2);rounded(c,-14,-46,18,10,2,'#d95a6a');rounded(c,-14,37,18,10,2,'#d95a6a');c.restore();c.save();c.font='900 11px system-ui';c.textAlign='center';c.fillStyle='#ffbebf';c.fillText('ENTRADA',clamp(p.x+15,30,1200),p.y-63);c.restore();}
+function renderBackground(){offscreen.width=W;offscreen.height=H;const c=offscreen.getContext('2d'),r=rngFactory(14425+currentStage*725);drawTerrain(c,LEVELS[currentStage],r);drawRoad(c,LEVELS[currentStage],r);for(const d of decorations)drawDecor(c,d);drawGate(c);bgCache=offscreen;}
+// ---------- VISUAL DINÂMICO: inimigos e torres representados de cima ----------
+function drawZombie(c,e){const s=e.r/13,walk=Math.sin(clock*(e.type==='fast'?14:9)+e.seed),spec=ENEMIES[e.type];
+ c.save();c.translate(e.x,e.y);c.rotate(e.angle+Math.PI/2);c.scale(s,s);
+ ellipse(c,3,9,17,11,'#091b2180');
+ // braços e pernas animados, diferenciáveis mesmo com muitos inimigos no mapa
+ line(c,-6,7+walk*5,-7,18+walk*3,spec.shade,5);line(c,6,7-walk*5,8,18-walk*3,spec.shade,5);
+ line(c,-9,-8, -15,5-walk*5,spec.color,6);line(c,9,-8,15,5+walk*5,spec.color,6);
+ rounded(c,-10,-12,20,24,5,spec.shade,'#152b30',2);rounded(c,-8,-13,16,17,4,spec.color);
+ ellipse(c,0,-16,9.5,9.5,e.type==='boss'?'#ddb4a1':'#b3cc9a');
+ if(e.type==='fast'){poly(c,[[-10,-18],[-1,-29],[7,-19]],'#407f9a');}else if(e.type==='tank'){rounded(c,-12,-12,24,8,2,'#9ea7a7','#38444e',2);rounded(c,-11,1,22,5,1,'#6e7d80');}
+ else if(e.type==='toxic'){ellipse(c,0,-20,9,5,'#a16ae6');ellipse(c,-12,-3,5,5,'#a16ae6');}
+ else if(e.type==='boss'){rounded(c,-14,-14,28,12,3,'#c97380','#4f233a',2);poly(c,[[-12,-22],[-18,-37],[-2,-24]],'#e2b9a5');poly(c,[[12,-22],[18,-37],[2,-24]],'#e2b9a5');}
+ ellipse(c,-4,-17,2,2,'#f35157');ellipse(c,4,-17,2,2,'#f35157');c.restore();
+ // barra de vida no mundo — proporcional ao tamanho do inimigo
+ const w=e.type==='boss'?88:e.type==='tank'?42:34,by=e.y-(e.r+22),ratio=clamp(e.hp/e.maxHp,0,1);
+ rounded(c,e.x-w/2-1,by-1,w+2,7,3,'#0c1c23cc');rounded(c,e.x-w/2,by,w*ratio,5,2,e.type==='boss'?'#ff779d':ratio>.45?'#93ea8e':'#f6b16b');
+ if(e.slowUntil>clock){c.strokeStyle='#b0f2ffbb';c.lineWidth=2;c.beginPath();c.arc(e.x,e.y,e.r+5,0,TAU);c.stroke()}
+ if(e.burnUntil>clock){ellipse(c,e.x+e.r*.7,e.y-e.r*.7,4,7,'#ffb36a')}
+}
+function drawTower(c,t,ghost=false,valid=true){const conf=TOWERS[t.type];c.save();c.translate(t.x,t.y);c.globalAlpha=ghost?.65:1;
+ ellipse(c,3,8,26,13,'#071c238a');ellipse(c,0,0,27,23,valid?'#142f35':'#532b34');ellipse(c,0,0,24,20,valid?'#719082':'#b15b65');ellipse(c,0,-1,19,16,'#243d41');
+ for(let i=0;i<6;i++){const a=i/6*TAU;ellipse(c,Math.cos(a)*21,Math.sin(a)*17,3,3,'#b3c1aa')}
+ c.save();c.rotate(t.angle||-Math.PI/2);
+ if(t.type==='archer'){rounded(c,-7,-10,19,18,5,'#517e50','#1a403b',2);line(c,1,-11,22,0,'#e7cf99',3);line(c,1,11,22,0,'#e7cf99',3);line(c,22,-2,22,2,'#f8f9d3',2);}
+ else if(t.type==='cannon'){rounded(c,-15,-14,30,28,7,'#505a61','#b6a996',2);rounded(c,4,-9,31,18,5,'#3a444c','#111c22',3);ellipse(c,35,0,7,9,'#a9b9b1');ellipse(c,35,0,3.5,5,'#18262c');}
+ else if(t.type==='ice'){poly(c,[[-16,0],[-5,-16],[12,-11],[21,0],[8,16],[-7,14]],'#549fc1','#b5efff',2);poly(c,[[0,-16],[11,0],[0,14],[-9,0]],'#c9f9ff');}
+ else if(t.type==='fire'){rounded(c,-13,-14,28,29,7,'#98563c','#edb06d',2);poly(c,[[-4,13],[-12,-1],[3,-23],[13,-4],[9,12]],'#f89a55');poly(c,[[0,9],[-4,-5],[5,-14],[8,5]],'#ffe2a0');}
+ else if(t.type==='electric'){rounded(c,-15,-13,29,25,6,'#737e58','#e5d98d',2);poly(c,[[4,-20],[-8,2],[1,1],[-3,20],[16,-5],[7,-4]],'#ffe77b','#fbf7bd',1);}
+ c.restore();if(t.stunned>clock&&!ghost){c.strokeStyle='#ff8da8';c.lineWidth=3;c.setLineDash([3,6]);c.beginPath();c.arc(0,0,28,0,TAU);c.stroke();c.setLineDash([]);}if(t.flash>0){ellipse(c,0,0,35,30,conf.color+'38');}
+ c.restore();}
+function drawBullets(c){for(const b of bullets){if(b.type==='archer'){const a=Math.atan2(b.target.y-b.y,b.target.x-b.x);c.save();c.translate(b.x,b.y);c.rotate(a);line(c,-12,0,8,0,'#fff0b6',3);poly(c,[[10,0],[1,-4],[1,4]],'#e9ffce');c.restore()}
+ else{ellipse(c,b.x,b.y,b.type==='cannon'?8:6,b.type==='cannon'?8:6,b.color);ellipse(c,b.x-2,b.y-2,2,2,'#fff8e9');}}
+}
+function drawFX(c){for(const e of effects){const v=e.life/e.max;c.save();c.globalAlpha=clamp(v,0,1);if(e.kind==='beam'){c.strokeStyle=e.color;c.lineWidth=6*v+2;c.shadowColor=e.color;c.shadowBlur=12;line(c,e.x,e.y,e.x2,e.y2,e.color,6*v+2);c.lineWidth=1;line(c,e.x,e.y,e.x2,e.y2,'#ffffff',1);}
+ else if(e.kind==='blast'||e.kind==='pulse'||e.kind==='poof'){let r=e.r||35;if(e.kind==='poof'){ellipse(c,e.x,e.y,r*(1.5-v),r*(1.5-v),e.color+'66');}else{c.beginPath();c.arc(e.x,e.y,r*(1.2-v*.3),0,TAU);c.lineWidth=e.kind==='pulse'?8*v:6*v;c.strokeStyle=e.color;c.stroke();}}
+ c.restore();}if(settings.particles)for(const p of particles){c.globalAlpha=Math.max(0,p.life/p.max);ellipse(c,p.x,p.y,p.radius,p.radius,p.color)}c.globalAlpha=1;}
+function drawHover(c){if(screen!=='game'||phase==='paused'||phase==='won'||phase==='lost')return;
+ if(selectedTower&&!selectedType&&!movingTower){c.save();c.strokeStyle=TOWERS[selectedTower.type].color+'aa';c.fillStyle=TOWERS[selectedTower.type].color+'12';c.setLineDash([9,7]);c.beginPath();c.arc(selectedTower.x,selectedTower.y,TOWERS[selectedTower.type].range,0,TAU);c.fill();c.stroke();c.restore();}
+ if(!hover)return;const type=movingTower?movingTower.type:selectedType;if(type){const valid=canPlace(hover.x,hover.y,movingTower);c.save();c.beginPath();c.arc(hover.x,hover.y,TOWERS[type].range,0,TAU);c.fillStyle=valid?'#b6f5a00f':'#e9565c13';c.fill();c.strokeStyle=valid?'#d4fbb67a':'#ff6969ac';c.setLineDash([9,9]);c.lineWidth=2;c.stroke();c.setLineDash([]);drawTower(c,{x:hover.x,y:hover.y,type,angle:-Math.PI/2,stunned:0,flash:0},true,valid);c.restore();}
+}
+function draw(){const pixelRatio=canvas.width/view.width;ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);ctx.clearRect(0,0,view.width,view.height);ctx.fillStyle=LEVELS[currentStage].bg[1];ctx.fillRect(0,0,view.width,view.height);
+ ctx.save();ctx.translate(view.ox,view.oy);ctx.scale(view.scale,view.scale);if(bgCache)ctx.drawImage(bgCache,0,0);drawBase(ctx);
+ const preview=screen!=='game';if(preview){const r=rngFactory(31);for(let i=0;i<13;i++){const p=pointAt((clock*18+i*165+150)%totalLength);drawZombie(ctx,{...ENEMIES.normal,x:p.x,y:p.y,angle:p.angle,type:i%4===0?'tank':i%3===0?'fast':'normal',r:i%4===0?18:13,hp:100,maxHp:100,seed:i,slowUntil:0,burnUntil:0});}for(const t of [{x:470,y:300,type:'archer'},{x:770,y:390,type:'cannon'},{x:1000,y:215,type:'ice'}])drawTower(ctx,{...t,angle:-.7,stunned:0,flash:0});}
+ else{for(const t of towers)drawTower(ctx,t);for(const e of enemies)drawZombie(ctx,e);drawBullets(ctx);drawFX(ctx);drawHover(ctx);}
+ ctx.restore();}
+function frame(t){const elapsed=Math.min((t-(frame.prev||t))/1000,.05);frame.prev=t;if(screen!=='game'){clock+=elapsed;lastAmbient+=elapsed;}
+ else if(phase==='active')updateGame(elapsed);else if(phase==='intermission'){clock+=elapsed;tickAutoWave(elapsed);}
+ draw();requestAnimationFrame(frame);}
+// ---------- ENTRADAS, CONSTRUÇÃO, INTERFACE ----------
+function pointerWorld(event){const rect=canvas.getBoundingClientRect();const x=event.clientX-rect.left,y=event.clientY-rect.top;return{x:(x-view.ox)/view.scale,y:(y-view.oy)/view.scale};}
+function findTower(p){let winner=null,best=32;for(const t of towers){const d=Math.hypot(p.x-t.x,p.y-t.y);if(d<best){best=d;winner=t;}}return winner;}
+function cancelChoice(){selectedType=null;selectedTower=null;movingTower=null;updateTools();}
+function chooseTower(type){if(screen!=='game'||phase==='paused'||phase==='won'||phase==='lost')return;if(selectedType===type&&!movingTower){cancelChoice();return;}selectedType=type;selectedTower=null;movingTower=null;updateTools();showToast(TOWERS[type].name+' custa 💰 '+moneyText(getTowerPrice(type))+'. Clique para construir!');}
+function updateTools(){
+ document.querySelectorAll('.tower-option').forEach(el=>el.classList.toggle('active',el.dataset.tower===selectedType));
+ $('towerSelection').classList.toggle('hidden',!selectedTower);
+ $('selectedTowerTitle').textContent=selectedTower?'⚙ '+TOWERS[selectedTower.type].name:movingTower?'⇄ MOVER TORRE':selectedType?'✦ '+TOWERS[selectedType].name:'CONSTRUA SUAS TORRES';
+ $('contextDescription').textContent=selectedTower?TOWERS[selectedTower.type].description+' • Reembolso de 60% ao remover.':movingTower?'Clique em qualquer terreno válido para reposicionar a torre gratuitamente.':selectedType?TOWERS[selectedType].description+' • Preço: 💰 '+moneyText(getTowerPrice(selectedType)):'Clique num tipo e depois no mapa. Ganhe dinheiro por dano aos zumbis.';
+ if(selectedTower){
+  const types=Object.keys(TOWERS),next=types[(types.indexOf(selectedTower.type)+1)%types.length];
+  const swapCost=getTowerPrice(next,currentStage,difficulty,towers.length-1)-sellValue(selectedTower);
+  $('switchTowerBtn').textContent='↻ TROCAR '+(swapCost>=0?'−💰 '+moneyText(swapCost):'+💰 '+moneyText(-swapCost));
+  $('removeTowerBtn').textContent='✕ REMOVER +💰 '+moneyText(sellValue(selectedTower));
+ }
+}
+function clickWorld(p){if(screen!=='game'||!['active','intermission'].includes(phase)||!Number.isFinite(p.x)||!Number.isFinite(p.y))return;
+ const hit=findTower(p);
+ if(movingTower){if(canPlace(p.x,p.y,movingTower)){movingTower.x=p.x;movingTower.y=p.y;selectedTower=movingTower;movingTower=null;selectedType=null;showToast('Torre reposicionada!');sound(420,.06);}else showToast('Não é possível colocar uma torre nesse local.');updateTools();return;}
+ if(hit){selectedTower=hit;selectedType=null;updateTools();return;}
+ if(selectedType){
+  const cost=getTowerPrice(selectedType);
+  if(money+1e-7<cost){showToast('💰 DINHEIRO INSUFICIENTE! Faltam '+moneyText(cost-money)+'. Cause dano aos zumbis para ganhar mais.');return;}
+  if(canPlace(p.x,p.y)){
+   money-=cost;
+   const t={id:++nextTowerId,x:p.x,y:p.y,type:selectedType,paid:cost,cooldown:rand(0,.15),angle:-Math.PI/2,flash:0,stunned:0};
+   towers.push(t);sound(480,.05);showToast(TOWERS[t.type].name+' CONSTRUÍDA! −💰 '+moneyText(cost));updateHUD(true);
+  }else{showToast('Terreno bloqueado! Escolha um local fora do caminho.');}return;}
+ selectedTower=null;updateTools();}
+canvas.addEventListener('pointermove',e=>{hover=pointerWorld(e);canvas.style.cursor=screen==='game'?'crosshair':'default'});
+canvas.addEventListener('pointerleave',()=>{hover=null});
+canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;hover=pointerWorld(e);clickWorld(hover);});
+canvas.addEventListener('contextmenu',e=>{e.preventDefault();cancelChoice();});
+document.querySelectorAll('.tower-option').forEach(btn=>btn.onclick=()=>chooseTower(btn.dataset.tower));
+$('moveTowerBtn').onclick=()=>{if(!selectedTower)return;movingTower=selectedTower;selectedTower=null;selectedType=null;updateTools();showToast('Clique no novo local para mover a torre.');};
+$('switchTowerBtn').onclick=()=>{if(!selectedTower)return;
+ const keys=Object.keys(TOWERS),next=keys[(keys.indexOf(selectedTower.type)+1)%keys.length];
+ const price=getTowerPrice(next,currentStage,difficulty,towers.length-1);
+ const delta=price-sellValue(selectedTower);
+ if(money+1e-7<delta){showToast('💰 Faltam '+moneyText(delta-money)+' para trocar para '+TOWERS[next].name+'.');return;}
+ money-=delta;selectedTower.type=next;selectedTower.paid=price;selectedTower.cooldown=0;
+ updateTools();updateHUD(true);showToast('Torre trocada para '+TOWERS[next].name+(delta>=0?' • −💰 '+moneyText(delta):' • +💰 '+moneyText(-delta)));
+};
+$('removeTowerBtn').onclick=()=>{if(!selectedTower)return;const refund=sellValue(selectedTower);money+=refund;towers=towers.filter(t=>t!==selectedTower);selectedTower=null;updateTools();updateHUD(true);showToast('Torre removida • +💰 '+moneyText(refund));};
+$('cancelBuildBtn').onclick=cancelChoice;
+$('nextWaveBtn').onclick=prepareWave;
+$('autoWaveBtn').onclick=()=>{if(screen!=='game'||!['active','intermission'].includes(phase))return;autoWave=!autoWave;autoWaveCountdown=autoWave&&phase==='intermission'?AUTO_WAVE_DELAY:null;updateAutoWaveButton();if(phase==='intermission')updateReadyMessage();showToast(autoWave?'⚡ Auto Wave LIGADO: próximas ondas começam sozinhas!':'Auto Wave DESLIGADO: avance manualmente.');};
+updateAutoWaveButton();
+$('pauseBtn').onclick=showPause;
+$('soundBtn').onclick=()=>{settings.sound=!settings.sound;save();updateSoundIcon();sound(600,.08);};updateSoundIcon();
+$('playBtn').onclick=showLevels;$('instructionsBtn').onclick=showInstructions;$('settingsBtn').onclick=showSettings;
+$('levelBack').onclick=()=>{openScreen('main');createMap(currentStage);};
+$('difficultyBack').onclick=showLevels;
+document.querySelectorAll('.difficulty-choice').forEach(el=>el.onclick=()=>{difficulty=el.dataset.difficulty;updateDifficultyPreview();});
+$('startGameBtn').onclick=enterGame;
+window.addEventListener('keydown',e=>{
+ if(['Space','ArrowUp','ArrowDown'].includes(e.code)&&screen==='game')e.preventDefault();
+ if(e.key==='Escape'){if(!$('modalOverlay').classList.contains('hidden')){if(phase==='paused')phase=phaseBeforePause;$('modalOverlay').classList.add('hidden');return;}if(selectedType||selectedTower||movingTower){cancelChoice();return;}showPause();return;}
+ if(screen!=='game'||!['intermission','active'].includes(phase)||e.repeat||e.altKey||e.ctrlKey)return;
+ if('12345'.includes(e.key))chooseTower(Object.keys(TOWERS)[Number(e.key)-1]);
+ if(e.key.toLowerCase()==='p')showPause();
+});
+createMap(0);openScreen('main');requestAnimationFrame(frame);
+})();
+
+</script>
+</body>
+</html>
